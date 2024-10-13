@@ -1,3 +1,4 @@
+# Домашнее задание 1
 ## Инструкция по развертыванию кластера hadoop
 * 1\. Работаем на jump node.
     - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
@@ -74,3 +75,33 @@
     - 1.3 Создаем симлинк `sudo ln -s /etc/nginx/sites-available/nn /etc/nginx/sites-enabled/nn`.
     - 1.4 Перезапускаем nginx `sudo systemctl reload nginx`.
     - 1.5 Веб-интерфейс доступен по пути `http://external_jn_ip:9870/`.
+
+# Домашнее задание 2
+## Инструкция по развертыванию YARN
+* 1\. Редактируем конфиги `mapred-site.xml` и `yarn-site.xml`
+    - 1.1 С помощью `ssh team@external_jn_ip` заходим на jump node
+    - 1.2 Меняем юзера на `hadoop` с помощью `sudo -i -u hadoop`
+    - 1.3 Переходим на name node, используя `ssh team-30-nn`
+    - 1.4 Меняем конфигурацию файла `/home/hadoop/hadoop-3.4.0/etc/hadoop/mapred-site.xml` на [mapred-site.xml](configs/mapred-site.xml)
+    - 1.5 Меняем конфигурацию файла `/home/hadoop/hadoop-3.4.0/etc/hadoop/yarn-site.xml` на [yarn-site.xml](configs/yarn-site.xml)
+    - 1.6 Копируем получившиеся конфиги на data nodes с помощью
+    ```
+    scp mapred-site.xml team-30-dn-1:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    scp mapred-site.xml team-30-dn-0:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    scp mapred-site.xml team-30-dn-1:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    scp mapred-site.xml team-30-dn-0:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    ```
+    - 1.7 Запускаем YARN из `/home/hadoop/hadoop-3.4.0/` командой `./sbin/start-yarn.sh`
+    - 1.8 Запускаем historyserver с помощью `mapred --daemon start historyserver`
+
+## Поднимаем веб-интерфейс для YARN и historyserver
+* 1\. Будем редактировать конфигурации reverse-proxy сервера nginx для YARN и history server
+    - 1.1 С помощью `ssh team@external_jn_ip` заходим на jump node
+    - 1.2 Создаем файлы [ya](configs/nginx/ya) и [dh](configs/nginx/dh) в директории `/etc/nginx/sites-available/`
+    - 1.3 Создаем сим линки
+    ```
+    sudo ln -s /etc/nginx/sites-available/dh /etc/nginx/sites-enabled/dh
+    sudo ln -s /etc/nginx/sites-available/ya /etc/nginx/sites-enabled/ya
+    ```
+    - 1.4 Перезапускаем nginx `sudo systemctl reload nginx`
+    - 1.5 Веб интерфейс YARN доступен по адресу `http://external_jn_ip:8088/`, веб интерфейс historyserver доступен по адресу `http://external_jn_ip:19888/`
