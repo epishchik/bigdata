@@ -107,3 +107,20 @@
     - 1.5 Веб интерфейс YARN доступен по адресу `http://external_jn_ip:8088/`, веб интерфейс historyserver доступен по адресу `http://external_jn_ip:19888/`
  
   # Домашнее задание 3
+* 1\. Работаем на name node.
+    - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
+    - 1.2 Скачаем дистрибутив hive `wget https://dlcdn.apache.org/hive/hive-4.0.1/apache-hive-4.0.1-bin.tar.gz`.
+    - 1.3 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
+    - 1.4 Распакуем его `tar -xzvf apache-hive-4.0.1-bin.tar.gz`
+    - 1.5 Пропишем пути
+      ```export HIVE_HOME=/home/hadoop/apache-hive-4.0.1-bin
+      export PATH=$HIVE_HOME/bin:$PATH```
+    - 1.7 Выйдем из пользователя hadoop `hdfs dfs -mkdir -p /user/hive/warehouse`.
+    - 
+    - 1.8 Редактируем файл с хостами, чтобы отключить локальную аддресацию `sudo nano /etc/hosts`. Комментируем все адреса и вставляем адреса нод с названием.
+    ```
+    local_jn_ip team-30-jn
+    local_nn_ip team-30-nn
+    local_dn0_ip team-30-dn-0
+    local_dn1_ip team-30-dn-1
+    ```
