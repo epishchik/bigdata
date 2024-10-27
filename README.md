@@ -105,3 +105,5 @@
     ```
     - 1.4 Перезапускаем nginx `sudo systemctl reload nginx`
     - 1.5 Веб интерфейс YARN доступен по адресу `http://external_jn_ip:8088/`, веб интерфейс historyserver доступен по адресу `http://external_jn_ip:19888/`
+ 
+  # Домашнее задание 3
