@@ -118,17 +118,18 @@
     - 1.8 Пропишем пути
       ```export HIVE_HOME=/home/hadoop/apache-hive-4.0.1-bin
       export PATH=$HIVE_HOME/bin:$PATH```
-    - 1.9 Выполним следующие команды ```
+    - 1.9 Выполним следующие команды```
       hdfs dfs -mkdir /tmp # выполнить если такой папки нет
       hdfs dfs -mkdir -p /user/hive/warehouse
       hdfs dfs -chmod g+w /tmp
       hdfs dfs -chmod g+w /user/hive/warehouse```
       Если появляется ошибка с "safe mode" выполнить `hdfs namenode -format` и повторить заново
-    - 1.8 Инициализируем базу данных hive командой `bin/schematool -dbType derby -initSchema`
-    - 1.9 Запустим hive `hive --hiveconf hive.server2.enable.doAs=false      --hiveconf hive.security.authorization.enabled=false      --service hiveserver2 1>> /tmp/hs2.log 2>> /tmp/hs2.log &`
-    - 1.10 Запустим утилиту hive `beeline -u jdbc:hive2://localhost:10000 -n scott -p tiger`
-    - 1.11 Создадим базу данных `CREATE DATABASE test;`
-    - 1.12 Создадим таблицу ```
+    - 1.10 Инициализируем базу данных hive командой `bin/schematool -dbType derby -initSchema`
+    - 1.11 Запустим hive `hive --hiveconf hive.server2.enable.doAs=false      --hiveconf hive.security.authorization.enabled=false      --service hiveserver2 1>> /tmp/hs2.log 2>> /tmp/hs2.log &`
+    - 1.12 Запустим утилиту hive `beeline -u jdbc:hive2://localhost:10000 -n scott -p tiger`
+    - 1.13 Создадим базу данных `CREATE DATABASE test;`
+    - 1.14 Создадим таблицу
+      ```
       CREATE TABLE IF NOT EXISTS test.poetry (
             rating int,
             views int,
@@ -137,7 +138,25 @@
       COMMENT 'poetry table'
       ROW FORMAT DELIMITED 
       FIELDS TERMINATED BY '\t';
-    ```
-    - 1.13 Загрузим данные в таблицу (предварительно загрузив на hdfs) `load data inpath '/tmp/data.tsv' into table test.poetry`
-    - 1.14
+      ```
+    - 1.15 Загрузим данные в таблицу (предварительно загрузив на hdfs) `load data inpath '/tmp/data.tsv' into table test.poetry`
+    - 1.16 Создадим партицированную таблицу
+      ```
+      CREATE TABLE IF NOT EXISTS test.poetry_final (
+            rating int,
+            views int
+      )
+      COMMENT 'poetry table final'
+      PARTITIONED BY (genre string)
+      ROW FORMAT DELIMITED 
+      FIELDS TERMINATED BY '\t';
+      ```
+    - 1.17 Загрузим в неё данные из предыдущей таблицы
+      ```
+      INSERT INTO TABLE test.poetry_final PARTITION (genre)
+      SELECT rating, views, genre
+      FROM test.poetry
+      WHERE rating IS NOT NULL;
+      ```
+      
     
