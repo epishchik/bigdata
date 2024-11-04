@@ -109,18 +109,35 @@
   # Домашнее задание 3
 * 1\. Работаем на name node.
     - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
-    - 1.2 Скачаем дистрибутив hive `wget https://dlcdn.apache.org/hive/hive-4.0.1/apache-hive-4.0.1-bin.tar.gz`.
-    - 1.3 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
-    - 1.4 Распакуем его `tar -xzvf apache-hive-4.0.1-bin.tar.gz`
-    - 1.5 Пропишем пути
+    - 1.2 Зайдем на na,e-node `ssh team@external_nn_ip`.
+    - 1.3 Скачаем дистрибутив hive `wget https://dlcdn.apache.org/hive/hive-4.0.1/apache-hive-4.0.1-bin.tar.gz`.
+    - 1.4 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
+    - 1.5 Перекидываем файл в домашнюю папку пользователя hadoop `cp /home/team/apache-hive-4.0.1-bin.tar.gz ./`
+    - 1.6 Распакуем его `tar -xzvf apache-hive-4.0.1-bin.tar.gz`
+    - 1.7 Перейдём в папку с hive `cd apache-hive-4.0.1-bin/`
+    - 1.8 Пропишем пути
       ```export HIVE_HOME=/home/hadoop/apache-hive-4.0.1-bin
       export PATH=$HIVE_HOME/bin:$PATH```
-    - 1.7 Выйдем из пользователя hadoop `hdfs dfs -mkdir -p /user/hive/warehouse`.
-    - 
-    - 1.8 Редактируем файл с хостами, чтобы отключить локальную аддресацию `sudo nano /etc/hosts`. Комментируем все адреса и вставляем адреса нод с названием.
+    - 1.9 Выполним следующие команды ```
+      hdfs dfs -mkdir /tmp # выполнить если такой папки нет
+      hdfs dfs -mkdir -p /user/hive/warehouse
+      hdfs dfs -chmod g+w /tmp
+      hdfs dfs -chmod g+w /user/hive/warehouse```
+      Если появляется ошибка с "safe mode" выполнить `hdfs namenode -format` и повторить заново
+    - 1.8 Инициализируем базу данных hive командой `bin/schematool -dbType derby -initSchema`
+    - 1.9 Запустим hive `hive --hiveconf hive.server2.enable.doAs=false      --hiveconf hive.security.authorization.enabled=false      --service hiveserver2 1>> /tmp/hs2.log 2>> /tmp/hs2.log &`
+    - 1.10 Запустим утилиту hive `beeline -u jdbc:hive2://localhost:10000 -n scott -p tiger`
+    - 1.11 Создадим базу данных `CREATE DATABASE test;`
+    - 1.12 Создадим таблицу ```
+      CREATE TABLE IF NOT EXISTS test.poetry (
+            rating int,
+            views int,
+            genre string
+      )
+      COMMENT 'poetry table'
+      ROW FORMAT DELIMITED 
+      FIELDS TERMINATED BY '\t';
     ```
-    local_jn_ip team-30-jn
-    local_nn_ip team-30-nn
-    local_dn0_ip team-30-dn-0
-    local_dn1_ip team-30-dn-1
-    ```
+    - 1.13 Загрузим данные в таблицу (предварительно загрузив на hdfs) `load data inpath '/tmp/data.tsv' into table test.poetry`
+    - 1.14
+    
