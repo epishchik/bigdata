@@ -107,15 +107,17 @@
   # Домашнее задание 3
 * 1\. Работаем на name node.
     - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
-    - 1.2 Зайдем на na,e-node `ssh team@external_nn_ip`.
-    - 1.3 Скачаем дистрибутив hive `wget https://dlcdn.apache.org/hive/hive-4.0.1/apache-hive-4.0.1-bin.tar.gz`.
-    - 1.4 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
-    - 1.5 Перекидываем файл в домашнюю папку пользователя hadoop `cp /home/team/apache-hive-4.0.1-bin.tar.gz ./`
-    - 1.6 Распакуем его `tar -xzvf apache-hive-4.0.1-bin.tar.gz`
-    - 1.7 Перейдём в папку с hive `cd apache-hive-4.0.1-bin/`
-    - 1.8 Пропишем пути
-      ```export HIVE_HOME=/home/hadoop/apache-hive-4.0.1-bin
-      export PATH=$HIVE_HOME/bin:$PATH```
+    - 1.2 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
+    - 1.3 Зайдем на name-node `ssh team-30-nn`.
+    - 1.4 Скачаем дистрибутив hive `wget https://archive.apache.org/dist/hive/hive-4.0.0-alpha-2/apache-hive-4.0.0-alpha-2-bin.tar.gz`.
+    - 1.5 Распакуем его `tar -xzvf apache-hive-4.0.0-alpha-2-bin.tar.gz`
+    - 1.6 Перейдём в папку с hive `cd apache-hive-4.0.0-alpha-2-bin/`
+    - 1.7 Пропишем пути в ~/.profile
+      ```
+      export HIVE_HOME=/home/hadoop/apache-hive-4.0.0-alpha-2-bin
+      export PATH=$HIVE_HOME/bin:$PATH
+      ```
+    - 1.8 Выполним `source ~/.profile`
     - 1.9 Выполним следующие команды```
       hdfs dfs -mkdir /tmp # выполнить если такой папки нет
       hdfs dfs -mkdir -p /user/hive/warehouse
