@@ -86,10 +86,8 @@
     - 1.5 Меняем конфигурацию файла `/home/hadoop/hadoop-3.4.0/etc/hadoop/yarn-site.xml` на [yarn-site.xml](configs/yarn-site.xml)
     - 1.6 Копируем получившиеся конфиги на data nodes с помощью
     ```
-    scp mapred-site.xml team-30-dn-1:/home/hadoop/hadoop-3.4.0/etc/hadoop
-    scp mapred-site.xml team-30-dn-0:/home/hadoop/hadoop-3.4.0/etc/hadoop
-    scp mapred-site.xml team-30-dn-1:/home/hadoop/hadoop-3.4.0/etc/hadoop
-    scp mapred-site.xml team-30-dn-0:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    scp mapred-site.xml yarn-site.xml team-30-dn-0:/home/hadoop/hadoop-3.4.0/etc/hadoop
+    scp mapred-site.xml yarn-site.xml team-30-dn-1:/home/hadoop/hadoop-3.4.0/etc/hadoop
     ```
     - 1.7 Запускаем YARN из `/home/hadoop/hadoop-3.4.0/` командой `./sbin/start-yarn.sh`
     - 1.8 Запускаем historyserver с помощью `mapred --daemon start historyserver`
