@@ -104,7 +104,7 @@
     - 1.4 Перезапускаем nginx `sudo systemctl reload nginx`
     - 1.5 Веб интерфейс YARN доступен по адресу `http://external_jn_ip:8088/`, веб интерфейс historyserver доступен по адресу `http://external_jn_ip:19888/`
  
-  # Домашнее задание 3
+# Домашнее задание 3
 * 1\. Работаем на name node.
     - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
     - 1.2 Сменим активного пользователя на hadoop `sudo -i -u hadoop`.
@@ -167,5 +167,25 @@
       FROM test.poetry
       WHERE rating IS NOT NULL;
       ```
-      
-    
+# Домашнее задание 4 
+* 1\. Настроим среду    
+  - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
+  - 1.2 Зайдем на name-node `ssh team-30-nn` под пользователем `team`
+  - 1.3 Установим поддержку виртуальной среды python с помощью команды `sudo apt install python3.12-venv`
+  - 1.4 Переключимся на юзера hadoop `sudo -i -u hadoop`
+  - 1.5 Добавим в ~/.profile строчку `export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop`
+  - 1.6 Перезагрущим переменные окружения `source ~/.profile`
+  - 1.7 Создадим папку в которой будем работать `mkdir spark_dataprocessing` и перейдем в нее `cd spark_dataprocessing`
+  - 1.8 Создадим виртаульную среду `python3 -m venv .venv`
+  - 1.9 Создадим файл requirements.txt и заполним его согласно [requirements.txt](spark/requirements.txt)
+  - 1.10 Активируем среду с помощью `source .venv/bin/activate`
+  - 1.11 Установим зависимости `pip install -r requirements.txt`
+* 2\. Добудем данные и положим их на hdfs
+  - 2.1 Создадим файл `get_california_housing.py` с таким [содержимым](spark/get_california_housing.py)
+  - 2.2 Запустим полученный скрипт с помощью `python3 get_california_housing.py`. После исполнения у нас должен появиться файл `california_housing.csv`
+  - 2.3 Скопируем файл из локальной файловой системы на hdfs с помощью `hdfs dfs -copyFromLocal california_housing.csv /tmp`
+* 3\. Приступим к транформациям и партицированию данных
+  - 3.1 Создадим файл `run_spark_processing.py` с таким [содержиммым](/spark/run_spark_processing.py)
+  - 3.2 Запустим его с помощью `python3 run_spark_processing.py`
+  - 3.3 Проверим наличие сохраненного файла `california_housing` в формате parquet на hdfs с помощью команды `hdfs dfs -ls /tmp/california_housing`
+  - 3.4 Проверим наличие сохраненного файла `california_housing` в формате таблицы с помощью `hdfs dfs -ls /user/hive/warehouse`
