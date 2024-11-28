@@ -203,3 +203,9 @@
   - 2.2 Запустим его с помощью `python3 data_processing_prefect.py`
   - 2.3 Проверим наличие сохраненного файла `california_housing` в формате parquet на hdfs с помощью команды `hdfs dfs -ls /tmp/california_housing_prefect`
   - 2.4 Проверим наличие сохраненного файла `california_housing` в формате таблицы с помощью `hdfs dfs -ls /user/hive/warehouse` (должна появиться таблица california_housing_prefect)
+* 3\. Prefect server
+  - 3.1 Создадим файл `data_processing_prefect_scheduled.py` с таким [содержимым](/prefect/data_processing_prefect_scheduled.py)
+  - 3.2 Укажем корректный API_URL `export PREFECT_API_URL="http://team-30-nn:port/api"`
+  - 3.3 Запустим сервер в фоне `prefect server start --host team-30-nn --port port -b`
+  - 3.4 Создадим расписание для flow `prefect flow serve data_processing_prefect_scheduled:california_housing_flow --cron "59 23 * * *" --name "daily" --no-pause-on-shutdown`
+  - 3.5 Можно закрыть процесс из пункта 3.4 при помощи Ctrl+C и посмотреть информацию про flow `prefect deployment inspect data_processing_flow/daily`
