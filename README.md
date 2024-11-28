@@ -169,7 +169,7 @@
       ```
 # Домашнее задание 4 
 * 1\. Настроим среду    
-  - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`.
+  - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`
   - 1.2 Зайдем на name-node `ssh team-30-nn` под пользователем `team`
   - 1.3 Установим поддержку виртуальной среды python с помощью команды `sudo apt install python3.12-venv`
   - 1.4 Переключимся на юзера hadoop `sudo -i -u hadoop`
@@ -185,7 +185,21 @@
   - 2.2 Запустим полученный скрипт с помощью `python3 get_california_housing.py`. После исполнения у нас должен появиться файл `california_housing.csv`
   - 2.3 Скопируем файл из локальной файловой системы на hdfs с помощью `hdfs dfs -copyFromLocal california_housing.csv /tmp`
 * 3\. Приступим к транформациям и партицированию данных
-  - 3.1 Создадим файл `run_spark_processing.py` с таким [содержиммым](/spark/run_spark_processing.py)
+  - 3.1 Создадим файл `run_spark_processing.py` с таким [содержимым](/spark/run_spark_processing.py)
   - 3.2 Запустим его с помощью `python3 run_spark_processing.py`
   - 3.3 Проверим наличие сохраненного файла `california_housing` в формате parquet на hdfs с помощью команды `hdfs dfs -ls /tmp/california_housing`
   - 3.4 Проверим наличие сохраненного файла `california_housing` в формате таблицы с помощью `hdfs dfs -ls /user/hive/warehouse`
+
+# Домашнее задание 5
+* 1\. Настроим среду
+  - 1.1 Зайдем на jump-node `ssh team@external_jn_ip`
+  - 1.2 Переключимся на юзера hadoop `sudo -i -u hadoop`
+  - 1.3 Зайдем на name-node `ssh team-30-nn`
+  - 1.4 Перейдем в папку `cd spark_dataprocessing`
+  - 1.5 Активируем виртуальное окружение, созданное в домашнем задании №4 `source .venv/bin/activate`
+  - 1.6 Установим prefect `pip install prefect==3.1.4`
+* 2\. Запустим поток prefect
+  - 2.1 Создадим файл `data_processing_prefect.py` с таким [содержимым](/prefect/data_processing_prefect.py)
+  - 2.2 Запустим его с помощью `python3 data_processing_prefect.py`
+  - 2.3 Проверим наличие сохраненного файла `california_housing` в формате parquet на hdfs с помощью команды `hdfs dfs -ls /tmp/california_housing_prefect`
+  - 2.4 Проверим наличие сохраненного файла `california_housing` в формате таблицы с помощью `hdfs dfs -ls /user/hive/warehouse` (должна появиться таблица california_housing_prefect)
