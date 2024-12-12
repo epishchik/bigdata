@@ -148,7 +148,8 @@
       ROW FORMAT DELIMITED 
       FIELDS TERMINATED BY '\t';
       ```
-    - 1.15 Загрузим данные в таблицу (предварительно загрузив на hdfs) `load data inpath '/tmp/data.tsv' into table test.poetry`
+    - 1.15 Загрузим данные в таблицу (предварительно загрузив на hdfs 'hdfs dfs -copyFromLocal /home/data.tsv /tmp/data.tsv'
+) `load data inpath '/tmp/data.tsv' into table test.poetry`
     - 1.16 Создадим партицированную таблицу
       ```
       CREATE TABLE IF NOT EXISTS test.poetry_final (
